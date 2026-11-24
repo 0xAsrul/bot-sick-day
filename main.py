@@ -14,6 +14,12 @@ ENTRY = (
 
 
 def main() -> None:
+    # Guard: the entry must be exactly one non-empty sentence, short enough
+    # to plausibly send as a single message. Fail loudly instead of writing
+    # a broken/empty entry file.
+    assert ENTRY.strip(), "entry line must not be empty"
+    assert "\n" not in ENTRY, "entry line must be a single line"
+    assert len(ENTRY) < 200, "entry line must be under 200 characters"
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
         f.write(ENTRY + "\n")
